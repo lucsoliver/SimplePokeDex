@@ -1,0 +1,34 @@
+﻿@page "/cadastrarPokemon"
+@inject IRepository<Pokemon> pokeRepo
+
+<h3>CadastroPokemon</h3>
+
+
+<p>Nome:</p>
+<input type="text" @bind=pokemon.Nome /> 
+<p>Tipo:</p>
+<input type="text" @bind=pokemon.Tipo /> 
+<p>Golpe Principal:</p>
+<input type="text" @bind=pokemon.GolpePrincipal /> 
+<p>Froca:</p>
+<input type="number" @bind=pokemon.Forca /> 
+<InputImg Label="Imagem" OnSelectedImage="ImagemSelecionada" ImageURL="@imageURL" ></InputImg>
+<button @onclick=CadastrarPokemon> Cadastrar </button>
+
+@code {
+    Pokemon pokemon = new Pokemon();
+    string imageURL;
+
+       private void ImagemSelecionada(string imageBase64)
+    {
+        pokemon.ImgUrl = imageBase64;
+        imageURL = null;
+    }
+
+    public async void CadastrarPokemon()
+    {
+        //Chama Api de Cadastro de Pokemon
+        await pokeRepo.Add(pokemon);
+        Console.WriteLine("Pokemon Cadastrado");
+    }
+}

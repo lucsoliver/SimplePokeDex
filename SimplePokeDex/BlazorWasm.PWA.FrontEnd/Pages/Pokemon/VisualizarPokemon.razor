@@ -1,0 +1,74 @@
+﻿@page "/visualizarPokemon"
+@layout BlankLayout
+@inject IRepository<Pokemon> pokeRepo
+<h3>VisualizarPokemon</h3>
+@if (pokemonAtual != null)
+{
+    <p>Id: @pokemonAtual.Id</p>
+    <br>
+    <p>Nome: @pokemonAtual.Nome</p>
+    <br>
+    <img src="@pokemonAtual.ImgUrl" style="width:200px" />
+    <br>
+    <p>Tipo: @pokemonAtual.Tipo</p>
+    <br>
+    <p>Golpe Principal: @pokemonAtual.GolpePrincipal</p>
+    <br>
+    <p>Forca: @pokemonAtual.Forca </p>
+    <br>
+    <br>
+
+    @if (idAtual > 1)
+    {
+        <button @onclick=IrParaAnterior> Anterior</button>
+    }
+
+    @if (idAtual < idMax)
+    {
+        <button @onclick=IrParaProximo> Proximo </button>
+    }
+
+}
+else
+{
+    <h2>Carregando</h2>
+}
+
+
+
+
+@code {
+    Pokemon? pokemonAtual = null;
+    private int idAtual = 1;
+    private int idMax;
+
+    protected async override Task OnInitializedAsync()
+    {
+        pokemonAtual = await pokeRepo.Get(idAtual);
+        idMax = (await pokeRepo.Get()).Count;
+    }
+
+    public async void IrParaAnterior()
+    {
+        idAtual--;
+        Console.WriteLine("Requisitando Pokemon: " + idAtual);
+        pokemonAtual = null;
+        pokemonAtual = await pokeRepo.Get(idAtual);
+        Console.WriteLine("Pokemon Encontrado ");
+        StateHasChanged();
+
+    }
+
+    public async void IrParaProximo()
+    {
+        idAtual++;
+        Console.WriteLine("Requisitando Pokemon: " + idAtual);
+        pokemonAtual = null;
+        pokemonAtual = await pokeRepo.Get(idAtual);
+        Console.WriteLine("Pokemon Encontrado ");
+        StateHasChanged();
+
+    }
+
+
+}

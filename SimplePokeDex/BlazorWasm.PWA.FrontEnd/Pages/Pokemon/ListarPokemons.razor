@@ -1,0 +1,30 @@
+﻿@page "/listapokemons"
+@inject IRepository<Pokemon> pokeRepo
+
+<h1>Lista De Pokemons</h1>
+
+@if (ListaPokemons != null)
+{
+    @foreach (Pokemon pokemon in ListaPokemons)
+    {
+        <h2> @pokemon.Nome </h2>
+        <br>
+        <img src="@pokemon.ImgUrl" style="width: 400px;" />
+    }
+
+}
+
+@code {
+    List<Pokemon>? ListaPokemons = null;
+
+    //Executa ao Inicializar O ComponenteGrafico
+    protected override async Task OnInitializedAsync()
+    {
+        //Pegar Lista de Pokemons DO Banco de Dados
+        //Via chamada de API (chamanda encapsulada no Repositoty)
+        ListaPokemons = await pokeRepo.Get();
+    }
+
+
+
+}
